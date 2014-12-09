@@ -29,7 +29,15 @@ private:
     XmlNode _root;
 };
 
+string get_type(string token);
 
+bool is_opening_tag(string token);
+bool is_closing_tag(string token);
+bool is_self_closing_tag(string token);
+bool is_comment_tag(string token);
+bool is_doctype_tag(string token);
+bool is_script_tag(string token);
+bool is_text_tag(string token);
 
 
 #endif

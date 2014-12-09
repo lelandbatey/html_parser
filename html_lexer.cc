@@ -10,6 +10,9 @@ using namespace std;
 HtmlLexer::HtmlLexer(): _current_token_index(0), _eof(false){}
 HtmlLexer::HtmlLexer(string& input_document): _current_token_index(0), _eof(false){ tokenize(input_document); }
 
+bool has_only_whitespace(std::string& str) {
+    return str.find_first_not_of(" \n") == std::string::npos;
+}
 
 void HtmlLexer::tokenize(string& input_document){
     vector<int> breaks;
@@ -19,22 +22,22 @@ void HtmlLexer::tokenize(string& input_document){
             if (!breaks.size()){
                 breaks.push_back(i);
             // Special case for tokenizing comments and all their contents
-            } else if (input_document.find("<!--") == i){
+            } else if (input_document.find("<!--", i) == i){
                 if (breaks.back() != i){
                     breaks.push_back(i);
                 }
-                unsigned int end_comment = input_document.find("-->");
+                unsigned int end_comment = input_document.find("-->", i);
                 if (end_comment != std::string::npos){
                     i = end_comment;
                 }
             // Special case for tokenizing script tag and it's entire contents
-            } else if (input_document.find("<script") == i){
+            } else if (input_document.find("<script", i) == i){
                 if (breaks.back() != i){
                     breaks.push_back(i);
                 }
                 // Causes for loop to pick up the ">" of the closing script
                 // tag as the end of the opening.
-                unsigned int end_script = input_document.find("/script");
+                unsigned int end_script = input_document.find("/script", i);
                 if (end_script != std::string::npos){
                     i = end_script;
                 }
@@ -56,6 +59,14 @@ void HtmlLexer::tokenize(string& input_document){
             _tokens.push_back(tmp);
         }
     }
+
+    vector<string> tmp;
+    for (unsigned int i = 0; i < _tokens.size(); ++i){
+        if (!has_only_whitespace(_tokens[i])){
+            tmp.push_back(_tokens[i]);
+        }
+    }
+    _tokens = tmp;
 }
 
 
@@ -79,4 +90,10 @@ bool HtmlLexer::eof(){
         _eof = true;
     }
     return _eof;
+}
+
+void HtmlLexer::print_tokens(){
+    for (int i = 0; i < _tokens.size(); ++i){
+        std::cout << "{" << _tokens[i] << "}" << std::endl;
+    }
 }

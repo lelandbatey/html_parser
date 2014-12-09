@@ -17,6 +17,28 @@ HtmlParser::HtmlParser(string& input_document): _root(string("root")){
     this->parse(input_document);
 }
 
+
+// Returns the type of a token representing an opening or closing tag.
+string get_type(string token){
+    string type("");
+    int offset;
+    if (is_opening_tag(token)){
+        offset = 1;
+    } else if (is_closing_tag(token)){
+        offset = 2;
+    }
+
+    for (int i = offset; i < token.size(); ++i){
+        if (token[i] != ' ' && token[i] != '>'){
+            type.push_back(token[i]);
+        } else {
+            break;
+        }
+    }
+    return type;
+}
+
+
 // Returns true if the passed in token represents an opening tag. Examples of
 // opening tags are:
 //     "<a>", "<html>", "<div>"
@@ -46,6 +68,8 @@ bool is_closing_tag(string token){
 bool is_self_closing_tag(string token){
     if (token.length() > 3){
         if (is_opening_tag(token) && token[token.size()-2] == '/'){
+            return true;
+        } else if (get_type(token) == "link"){
             return true;
         }
     }
@@ -93,26 +117,6 @@ string clean_tag(string token){
 string remove_quotes(string quoted_str){
     // Assumes that the string we've been given begins and ends with quotes.
     return quoted_str.substr(1, quoted_str.size()-2);
-}
-
-// Returns the type of a token representing an opening or closing tag.
-string get_type(string token){
-    string type("");
-    int offset;
-    if (is_opening_tag(token)){
-        offset = 1;
-    } else if (is_closing_tag(token)){
-        offset = 2;
-    }
-
-    for (int i = offset; i < token.size(); ++i){
-        if (token[i] != ' ' && token[i] != '>'){
-            type.push_back(token[i]);
-        } else {
-            break;
-        }
-    }
-    return type;
 }
 
 
@@ -227,9 +231,12 @@ void HtmlParser::parse(string& input_document){
             XmlNode* tn = current_node;
             // if this closing tag doesn't coorespond to an opening tag.
             while (tn->get_type() != type){
+                if (DEBUG){
+                    std::cout << tn->get_type() << std::endl;
+                }
                 if (tn->is_root()){
                     if (DEBUG){
-                        std::cerr << token << std::endl;
+                        std::cerr << "'" << token << "'" << std::endl;
                     }
                     std::cerr << "HTML is malformed." << std::endl;
                     return;

@@ -18,6 +18,7 @@ public:
     string get_next_token();
     vector<string> get_tokens();
     bool eof();
+    void print_tokens();
 
 private:
     vector<string> _tokens;
