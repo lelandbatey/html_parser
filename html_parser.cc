@@ -4,7 +4,7 @@
 #include <map>
 
 #include "html_parser.h"
-#include "parse_str.h"
+#include "lazy_string.h"
 
 using namespace std;
 

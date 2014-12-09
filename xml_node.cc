@@ -3,7 +3,7 @@
 #include <string>
 
 #include "xml_node.h"
-#include "parse_str.h"
+#include "lazy_string.h"
 
 #pragma once
 

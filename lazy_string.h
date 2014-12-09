@@ -1,5 +1,5 @@
-#ifndef PARSE_STR_H
-#define PARSE_STR_H
+#ifndef LAZY_STR_H
+#define LAZY_STR_H
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -13,6 +13,8 @@ using namespace std;
 // Contains all my lazy functions for string manipulation. This *cannot* be a
 // good or wise thing to do, but I don't know what I'm supposed to do with
 // this...
+
+
 
 std::string dubToStr(double dub) {
     std::ostringstream temp;
