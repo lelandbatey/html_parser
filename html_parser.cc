@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cctype> /* isspace() */
 #include <map>
 
 #include "html_parser.h"
@@ -29,12 +30,13 @@ string get_type(string token){
     }
 
     for (int i = offset; i < token.size(); ++i){
-        if (token[i] != ' ' && token[i] != '>'){
+        if (!isspace(token[i]) && token[i] != '>'){
             type.push_back(token[i]);
         } else {
             break;
         }
     }
+    
     return type;
 }
 
