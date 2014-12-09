@@ -201,6 +201,10 @@ void HtmlParser::parse(string& input_document){
     while (!_lexer.eof()){
         string token = _lexer.get_next_token();
 
+        if (DEBUG){
+            std::cerr << token << std::endl;
+        }
+
         if (is_comment_tag(token)){
             new XmlNode(current_node, "comment", token);
 
