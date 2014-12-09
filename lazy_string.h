@@ -4,10 +4,6 @@
 #include <iostream>
 #include <sstream>
 
-#ifndef _DEBUG_
-#define _DEBUG_ 0
-#endif
-
 using namespace std;
 
 // Contains all my lazy functions for string manipulation. This *cannot* be a

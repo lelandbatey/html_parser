@@ -6,6 +6,10 @@
 #include "html_parser.h"
 #include "lazy_string.h"
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
 using namespace std;
 
 HtmlParser::HtmlParser(): _root(string("root")){}
@@ -220,6 +224,9 @@ void HtmlParser::parse(string& input_document){
             // if this closing tag doesn't coorespond to an opening tag.
             while (tn->get_type() != type){
                 if (tn->is_root()){
+                    if (DEBUG){
+                        std::cerr << token << std::endl;
+                    }
                     std::cerr << "HTML is malformed." << std::endl;
                     return;
                 }
