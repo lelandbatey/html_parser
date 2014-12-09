@@ -56,7 +56,7 @@ int XmlNode::get_depth(){
 	if (!is_root()){
 		return _parent->get_depth()+1;
 	} else {
-		return 0;
+		return -1;
 	}
 }
 
