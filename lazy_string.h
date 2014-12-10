@@ -54,6 +54,23 @@ std::string strUpper(std::string str) {
 }
 
 
+// Checks if the given index in a string contains the given key
+bool string_at_position(string key, string* scan_str, unsigned int index){
+    // Keeps us from trying to read past the end of a string
+    unsigned int len = scan_str->length() - index;
+    if (len > key.length()){
+        len = key.length();
+    }
+
+    for (unsigned int i = 0; i < len; ++i){
+        if ((*scan_str)[i+index] != key[i]){
+            return false;
+        }
+    }
+    return true;
+}
+
+
 
 
 

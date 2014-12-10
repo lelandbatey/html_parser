@@ -3,8 +3,13 @@
 #include <string>
 
 #include "html_lexer.h"
+#include "lazy_string.h"
 
 using namespace std;
+
+#ifndef DEBUG
+#define DEBUG 0
+#endif
 
 
 HtmlLexer::HtmlLexer(): _current_token_index(0), _eof(false){}
@@ -14,6 +19,9 @@ bool has_only_whitespace(std::string& str) {
     return str.find_first_not_of(" \n") == std::string::npos;
 }
 
+
+// Given an input string, break it into a vector of string, each string in the
+// vector being a token.
 void HtmlLexer::tokenize(string& input_document){
     vector<int> breaks;
 
@@ -22,7 +30,7 @@ void HtmlLexer::tokenize(string& input_document){
             if (!breaks.size()){
                 breaks.push_back(i);
             // Special case for tokenizing comments and all their contents
-            } else if (input_document.find("<!--", i) == i){
+            } else if (string_at_position("<!--", &input_document, i)){
                 if (breaks.back() != i){
                     breaks.push_back(i);
                 }
@@ -31,7 +39,7 @@ void HtmlLexer::tokenize(string& input_document){
                     i = end_comment;
                 }
             // Special case for tokenizing script tag and it's entire contents
-            } else if (input_document.find("<script", i) == i){
+            } else if (string_at_position("<script", &input_document, i)){
                 if (breaks.back() != i){
                     breaks.push_back(i);
                 }
@@ -67,6 +75,10 @@ void HtmlLexer::tokenize(string& input_document){
         }
     }
     _tokens = tmp;
+
+    if (DEBUG){
+        std::cout << "Lexing completed." << std::endl;
+    }
 }
 
 

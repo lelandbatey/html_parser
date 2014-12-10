@@ -78,7 +78,7 @@ bool is_self_closing_tag(string token){
     return false;
 }
 bool is_comment_tag(string token){
-    if (token.find("<!--") == 0){
+    if (string_at_position("<!--", &token, 0)){
         return true;
     }
     return false;
@@ -90,7 +90,7 @@ bool is_doctype_tag(string token){
     return false;
 }
 bool is_script_tag(string token){
-    if (token.find("<script") == 0){
+    if (string_at_position("<script", &token, 0)){
         return true;
     }
     return false;
