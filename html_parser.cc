@@ -234,7 +234,7 @@ void HtmlParser::parse(string& input_document){
             // if this closing tag doesn't coorespond to an opening tag.
             while (tn->get_type() != type){
                 if (DEBUG){
-                    std::cout << tn->get_type() << std::endl;
+                    std::cerr << tn->get_type() << std::endl;
                 }
                 if (tn->is_root()){
                     if (DEBUG){
