@@ -29,7 +29,7 @@ string get_type(string token){
         offset = 2;
     }
 
-    for (int i = offset; i < token.size(); ++i){
+    for (unsigned int i = offset; i < token.size(); ++i){
         if (!isspace(token[i]) && token[i] != '>'){
             type.push_back(token[i]);
         } else {
@@ -130,7 +130,7 @@ vector<string> tokenize_opening_tags(string opening_tag){
     string buffer("");
     char delim = 0;
 
-    for (int i = 0; i < opening_tag.size(); ++i){
+    for (unsigned int i = 0; i < opening_tag.size(); ++i){
         char cc = opening_tag[i];
         if (!in_quotes && (cc == ' ' || cc == '>' || cc == '/')){
             // Important that these two if statements be separate. If buffer
@@ -177,7 +177,7 @@ map<string, string> get_attributes(string token){
         return attributes;
     }
 
-    for (int i = 1; i < attr_tokens.size(); ++i){
+    for (unsigned int i = 1; i < attr_tokens.size(); ++i){
         string temp_key = attr_tokens[i];
         string temp_value = "";
 

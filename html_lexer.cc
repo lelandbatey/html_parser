@@ -93,7 +93,7 @@ bool HtmlLexer::eof(){
 }
 
 void HtmlLexer::print_tokens(){
-    for (int i = 0; i < _tokens.size(); ++i){
+    for (unsigned int i = 0; i < _tokens.size(); ++i){
         std::cout << "{" << _tokens[i] << "}" << std::endl;
     }
 }
