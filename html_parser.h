@@ -24,11 +24,13 @@ namespace htmlparser {
 
         std::vector<std::string> find_all_attributes(std::string attribute_name);
 
+        bool is_valid_html();
 
     private:
         void find_attrs(std::string attr_val, XmlNode* node, std::vector<std::string>* found);
         HtmlLexer _lexer;
         XmlNode _root;
+        bool _is_valid_html;
     };
 
     std::string get_type(std::string token);
@@ -36,6 +38,7 @@ namespace htmlparser {
     bool is_opening_tag(std::string token);
     bool is_closing_tag(std::string token);
     bool is_self_closing_tag(std::string token);
+    bool is_void_element(std::string token);
     bool is_comment_tag(std::string token);
     bool is_doctype_tag(std::string token);
     bool is_script_tag(std::string token);

@@ -92,6 +92,16 @@ std::string htmlparser::HtmlLexer::get_next_token(){
     return to_return;
 }
 
+std::string htmlparser::HtmlLexer::peak_next_token(){
+    std::string to_return;
+    if (_current_token_index+1 < _tokens.size()){
+        to_return = _tokens[_current_token_index+1];
+    } else {
+        to_return = std::string('\0');
+    }
+    return to_return;
+}
+
 std::vector<std::string> htmlparser::HtmlLexer::get_tokens(){
     return _tokens;
 }

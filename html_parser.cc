@@ -13,8 +13,8 @@
 
 using namespace std;
 
-htmlparser::HtmlParser::HtmlParser(): _root(std::string("root")){}
-htmlparser::HtmlParser::HtmlParser(std::string& input_document): _root(std::string("root")){
+htmlparser::HtmlParser::HtmlParser(): _root(std::string("root")), _is_valid_html(true){}
+htmlparser::HtmlParser::HtmlParser(std::string& input_document): _root(std::string("root")), _is_valid_html(true){
     this->parse(input_document);
 }
 
@@ -71,11 +71,26 @@ bool htmlparser::is_self_closing_tag(std::string token){
     if (token.length() > 3){
         if (is_opening_tag(token) && token[token.size()-2] == '/'){
             return true;
-        } else if (get_type(token) == "link"){
+        } else if (is_void_element(token)){
             return true;
         }
     }
     return false;
+}
+bool htmlparser::is_void_element(std::string token){
+    std::string type = get_type(token);
+    // List of void elements taken from the HTML5 specification:
+    //     http://www.w3.org/TR/html5/syntax.html#void-elements
+    std::vector<std::string> void_elements = {"area", "base", "br", "col",
+        "embed", "hr", "img", "input", "keygen", "link", "meta", "param", "source", "track", "wbr"};
+
+    for (unsigned int i = 0; i < void_elements.size(); ++i){
+        if (type == void_elements[i]){
+            return true;
+        }
+    }
+    return false;
+
 }
 bool htmlparser::is_comment_tag(std::string token){
     if (str_at_position("<!--", &token, 0)){
@@ -225,6 +240,13 @@ void htmlparser::HtmlParser::parse(std::string& input_document){
             attributes = get_attributes(token);
             current_node = new XmlNode(current_node, type, attributes);
             if (is_self_closing_tag(token)){
+                // Handles case where a void-element has a closing tag when
+                // it's not supposed to, such as <link></link>
+                if (is_void_element(token) &&
+                    get_type(_lexer.peak_next_token()) == type){
+                    token = _lexer.get_next_token();
+                    _is_valid_html = false;
+                }
                 current_node = current_node->get_parent();
             }
         
@@ -243,6 +265,7 @@ void htmlparser::HtmlParser::parse(std::string& input_document){
                     std::cerr << "HTML is malformed." << std::endl;
                     return;
                 }
+                _is_valid_html = false;
                 tn = tn->get_parent();
             }
             current_node = tn->get_parent();
@@ -309,4 +332,9 @@ std::vector<std::string> htmlparser::HtmlParser::find_all_attributes(std::string
     std::vector<std::string> found_attributes;
     this->find_attrs(attribute_name, &_root, &found_attributes);
     return found_attributes;
+}
+
+
+bool htmlparser::HtmlParser::is_valid_html(){
+    return _is_valid_html;
 }

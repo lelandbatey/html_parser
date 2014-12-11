@@ -16,6 +16,7 @@ namespace htmlparser {
 
         void tokenize(std::string& input_document);
         std::string get_next_token();
+        std::string peak_next_token();
         std::vector<std::string> get_tokens();
         bool eof();
         void print_tokens();
