@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <iostream>
 #include <string>
 
@@ -7,52 +6,49 @@
 
 #pragma once
 
-using namespace std;
 
-
-
-bool XmlNode::has_children(){
+bool htmlparser::XmlNode::has_children(){
 	if (!_children.empty()){
 		return true;
 	}
 	return false;
 }
 
-bool XmlNode::is_root(){
+bool htmlparser::XmlNode::is_root(){
 	if (!_parent){
 		return true;
 	}
 	return false;
 }
 
-bool XmlNode::has_text(){
+bool htmlparser::XmlNode::has_text(){
 	if (_contents.length()){
 		return true;
 	}
 	return false;
 }
 
-bool XmlNode::has_attribute(string key){
-	key = strLower(key);
+bool htmlparser::XmlNode::has_attribute(std::string key){
+	key = htmlparser::strLower(key);
 	if (_attributes.count(key) > 0){
 		return true;
 	}
 	return false;
 }
 
-string XmlNode::get_text(){ return _contents; }
-XmlNode* XmlNode::get_parent(){ return _parent; }
-vector<XmlNode*> XmlNode::get_children(){ return _children; }
-string XmlNode::get_type(){ return _type; }
-string XmlNode::get_attribute(string key){
-	key = strLower(key);
+std::string htmlparser::XmlNode::get_text(){ return _contents; }
+htmlparser::XmlNode* htmlparser::XmlNode::get_parent(){ return _parent; }
+std::vector<htmlparser::XmlNode*> htmlparser::XmlNode::get_children(){ return _children; }
+std::string htmlparser::XmlNode::get_type(){ return _type; }
+std::string htmlparser::XmlNode::get_attribute(std::string key){
+	key = htmlparser::strLower(key);
 	if (_attributes.count(key) > 0){
 		return _attributes[key];
 	} else {
-		return string("");
+		return std::string("");
 	}
 }
-int XmlNode::get_depth(){
+int htmlparser::XmlNode::get_depth(){
 	if (!is_root()){
 		return _parent->get_depth()+1;
 	} else {
@@ -60,23 +56,23 @@ int XmlNode::get_depth(){
 	}
 }
 
-void XmlNode::add_child(XmlNode* child){
+void htmlparser::XmlNode::add_child(XmlNode* child){
 	_children.push_back(child);
 }
 
-XmlNode::XmlNode(string type):_type(strLower(type)), _parent(0){}
+htmlparser::XmlNode::XmlNode(std::string type):_type(htmlparser::strLower(type)), _parent(0){}
 
-XmlNode::XmlNode(string type, map<string, string> attributes):
-	_type(strLower(type)), _attributes(attributes), _parent(0){}
+htmlparser::XmlNode::XmlNode(std::string type, std::map<std::string, std::string> attributes):
+	_type(htmlparser::strLower(type)), _attributes(attributes), _parent(0){}
 
-XmlNode::XmlNode(XmlNode* parent, string type, string contents):
-	_type(strLower(type)), _contents(contents), _parent(parent){
+htmlparser::XmlNode::XmlNode(XmlNode* parent, std::string type, std::string contents):
+	_type(htmlparser::strLower(type)), _contents(contents), _parent(parent){
 
 	_parent->add_child(this);
 }
 
-XmlNode::XmlNode(XmlNode* parent, string type, map<string, string> attributes):
-	_type(strLower(type)), _attributes(attributes), _parent(parent){
+htmlparser::XmlNode::XmlNode(XmlNode* parent, std::string type, std::map<std::string, std::string> attributes):
+	_type(htmlparser::strLower(type)), _attributes(attributes), _parent(parent){
 	_parent->add_child(this);
 }
 

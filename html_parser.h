@@ -10,34 +10,44 @@
 
 using namespace std;
 
-
-class HtmlParser
-{
-public:
-    HtmlParser();
-    HtmlParser(string& input_document);
+namespace htmlparser {
     
-    void parse(string& input_document);
-    void print();
-    void recursive_tree_printer(XmlNode* node);
+    class HtmlParser
+    {
+    public:
+        HtmlParser();
+        HtmlParser(std::string& input_document);
+        
+        void parse(std::string& input_document);
+        void print();
+        void recursive_tree_printer(XmlNode* node);
 
-    vector<string> find_all_attributes(string attribute_name);
+        std::vector<std::string> find_all_attributes(std::string attribute_name);
 
 
-private:
-    HtmlLexer _lexer;
-    XmlNode _root;
-};
+    private:
+        void find_attrs(std::string attr_val, XmlNode* node, std::vector<std::string>* found);
+        HtmlLexer _lexer;
+        XmlNode _root;
+    };
 
-string get_type(string token);
+    std::string get_type(std::string token);
 
-bool is_opening_tag(string token);
-bool is_closing_tag(string token);
-bool is_self_closing_tag(string token);
-bool is_comment_tag(string token);
-bool is_doctype_tag(string token);
-bool is_script_tag(string token);
-bool is_text_tag(string token);
+    bool is_opening_tag(std::string token);
+    bool is_closing_tag(std::string token);
+    bool is_self_closing_tag(std::string token);
+    bool is_comment_tag(std::string token);
+    bool is_doctype_tag(std::string token);
+    bool is_script_tag(std::string token);
+    bool is_text_tag(std::string token);
+
+    std::string clean_tag(std::string token);
+    std::string remove_quotes(std::string quoted_str);
+    std::vector<std::string> tokenize_opening_tags(std::string opening_tag);
+    std::map<std::string, std::string> get_attributes(std::string token);
+
+}
+
 
 
 #endif

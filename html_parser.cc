@@ -13,15 +13,15 @@
 
 using namespace std;
 
-HtmlParser::HtmlParser(): _root(string("root")){}
-HtmlParser::HtmlParser(string& input_document): _root(string("root")){
+htmlparser::HtmlParser::HtmlParser(): _root(std::string("root")){}
+htmlparser::HtmlParser::HtmlParser(std::string& input_document): _root(std::string("root")){
     this->parse(input_document);
 }
 
 
 // Returns the type of a token representing an opening or closing tag.
-string get_type(string token){
-    string type("");
+std::string htmlparser::get_type(std::string token){
+    std::string type("");
     int offset;
     if (is_opening_tag(token)){
         offset = 1;
@@ -46,7 +46,7 @@ string get_type(string token){
 //     "<a>", "<html>", "<div>"
 //
 // If the tag is a closing tag or any other kind of tag, this returns false.
-bool is_opening_tag(string token){
+bool htmlparser::is_opening_tag(std::string token){
     if (token.length() > 2){
         if (token[0] == '<' && token[1] != '/'){
             return true;
@@ -59,7 +59,7 @@ bool is_opening_tag(string token){
 //     "</a>", "</body>", "</div>"
 //
 // If the tag is a closing tag or any other kind of tag, this returns false.
-bool is_closing_tag(string token){
+bool htmlparser::is_closing_tag(std::string token){
     if (token.length() > 3){
         if (token[0] == '<' && token[1] == '/'){
             return true;
@@ -67,7 +67,7 @@ bool is_closing_tag(string token){
     }
     return false;
 }
-bool is_self_closing_tag(string token){
+bool htmlparser::is_self_closing_tag(std::string token){
     if (token.length() > 3){
         if (is_opening_tag(token) && token[token.size()-2] == '/'){
             return true;
@@ -77,32 +77,32 @@ bool is_self_closing_tag(string token){
     }
     return false;
 }
-bool is_comment_tag(string token){
-    if (string_at_position("<!--", &token, 0)){
+bool htmlparser::is_comment_tag(std::string token){
+    if (str_at_position("<!--", &token, 0)){
         return true;
     }
     return false;
 }
-bool is_doctype_tag(string token){
+bool htmlparser::is_doctype_tag(std::string token){
     if (!is_comment_tag(token) && token[1] == '!'){
         return true;
     }
     return false;
 }
-bool is_script_tag(string token){
-    if (string_at_position("<script", &token, 0)){
+bool htmlparser::is_script_tag(std::string token){
+    if (str_at_position("<script", &token, 0)){
         return true;
     }
     return false;
 }
-bool is_text_tag(string token){
+bool htmlparser::is_text_tag(std::string token){
     if (token.find_first_of("<>") == std::string::npos){
         return true;
     }
     return false;
 }
 
-string clean_tag(string token){
+std::string htmlparser::clean_tag(std::string token){
     int trim, start;
     if (is_closing_tag(token)){
         start = 2; trim = 3;
@@ -112,22 +112,22 @@ string clean_tag(string token){
         start = 1; trim = 2;
     }
 
-    string trimmed = token.substr(start, token.size()-trim);
+    std::string trimmed = token.substr(start, token.size()-trim);
     return trimmed;
 }
 
-string remove_quotes(string quoted_str){
+std::string htmlparser::remove_quotes(std::string quoted_str){
     // Assumes that the string we've been given begins and ends with quotes.
     return quoted_str.substr(1, quoted_str.size()-2);
 }
 
 
-vector<string> tokenize_opening_tags(string opening_tag){
-    opening_tag = clean_tag(opening_tag);
-    vector<string> tokens;
+std::vector<std::string> htmlparser::tokenize_opening_tags(std::string opening_tag){
+    opening_tag = htmlparser::clean_tag(opening_tag);
+    std::vector<std::string> tokens;
     
     bool in_quotes = false, escaped = false;
-    string buffer("");
+    std::string buffer("");
     char delim = 0;
 
     for (unsigned int i = 0; i < opening_tag.size(); ++i){
@@ -137,14 +137,14 @@ vector<string> tokenize_opening_tags(string opening_tag){
             // has no size, then we do nothing, which is intended behaviour.
             if (buffer.size()){
                 tokens.push_back(buffer);
-                buffer = string("");
+                buffer = std::string("");
             }
         } else if (!in_quotes && cc == '='){
             // Tokenizes equals symbol as it's own token
             if (buffer.size()){
                 tokens.push_back(buffer);
-                tokens.push_back(string("="));
-                buffer = string("");
+                tokens.push_back(std::string("="));
+                buffer = std::string("");
             }
         } else {
             buffer.push_back(cc);
@@ -166,11 +166,11 @@ vector<string> tokenize_opening_tags(string opening_tag){
     return tokens;
 }
 
-map<string, string> get_attributes(string token){
-    map<string, string> attributes;
+std::map<std::string, std::string> htmlparser::get_attributes(std::string token){
+    std::map<std::string, std::string> attributes;
 
-    vector<string> attr_tokens = tokenize_opening_tags(token);
-    string temp_key(""), temp_value("");
+    std::vector<std::string> attr_tokens = tokenize_opening_tags(token);
+    std::string temp_key(""), temp_value("");
     
 
     if (attr_tokens.size() < 2){
@@ -178,8 +178,8 @@ map<string, string> get_attributes(string token){
     }
 
     for (unsigned int i = 1; i < attr_tokens.size(); ++i){
-        string temp_key = attr_tokens[i];
-        string temp_value = "";
+        std::string temp_key = attr_tokens[i];
+        std::string temp_value = "";
 
         if (i+2 < attr_tokens.size()){
             if (attr_tokens[i+1] == "="){
@@ -196,16 +196,16 @@ map<string, string> get_attributes(string token){
 }
 
 
-void HtmlParser::parse(string& input_document){
-    map<string, string> attributes;
-    _lexer = HtmlLexer(input_document);
+void htmlparser::HtmlParser::parse(std::string& input_document){
+    std::map<std::string, std::string> attributes;
+    _lexer = htmlparser::HtmlLexer(input_document);
     XmlNode* root = &_root;
 
     XmlNode* current_node = root;
-    string type("");
+    std::string type("");
 
     while (!_lexer.eof()){
-        string token = _lexer.get_next_token();
+        std::string token = _lexer.get_next_token();
 
         if (DEBUG){
             std::cerr << token << std::endl;
@@ -255,7 +255,7 @@ void HtmlParser::parse(string& input_document){
 }
 
 // Recursively prints the correct structure of an HTML tree.
-void HtmlParser::recursive_tree_printer(XmlNode* node){
+void htmlparser::HtmlParser::recursive_tree_printer(XmlNode* node){
     
     for (int i = 0; i < node->get_depth(); ++i){
         std::cout << "    ";
@@ -267,7 +267,7 @@ void HtmlParser::recursive_tree_printer(XmlNode* node){
     }
 
     if (node->has_children()){
-        vector<XmlNode*> children = node->get_children();
+        std::vector<XmlNode*> children = node->get_children();
         for (unsigned int i = 0; i < children.size(); ++i){
             recursive_tree_printer(children[i]);
         }
@@ -281,23 +281,23 @@ void HtmlParser::recursive_tree_printer(XmlNode* node){
     }
 }
 
-void HtmlParser::print(){
+void htmlparser::HtmlParser::print(){
     if (_root.has_children()){
-        vector<XmlNode*> children = _root.get_children();
+        std::vector<XmlNode*> children = _root.get_children();
         for (unsigned int i = 0; i < children.size(); ++i){
             recursive_tree_printer(children[i]);
         }
     }
 }
 
-void find_attrs(string attr_val, XmlNode* node, vector<string>* found){
+void htmlparser::HtmlParser::find_attrs(std::string attr_val, XmlNode* node, std::vector<std::string>* found){
 
     if (node->has_attribute(attr_val)){
         found->push_back(node->get_attribute(attr_val));
     }
 
     if (node->has_children()){
-        vector<XmlNode*> children = node->get_children();
+        std::vector<XmlNode*> children = node->get_children();
         for (unsigned int i = 0; i < children.size(); ++i){
             find_attrs(attr_val, children[i], found);
         }
@@ -305,8 +305,8 @@ void find_attrs(string attr_val, XmlNode* node, vector<string>* found){
 }
 
 // Trampolines into the "find_attrs" function
-vector<string> HtmlParser::find_all_attributes(string attribute_name){
-    vector<string> found_attributes;
-    find_attrs(attribute_name, &_root, &found_attributes);
+std::vector<std::string> htmlparser::HtmlParser::find_all_attributes(std::string attribute_name){
+    std::vector<std::string> found_attributes;
+    this->find_attrs(attribute_name, &_root, &found_attributes);
     return found_attributes;
 }

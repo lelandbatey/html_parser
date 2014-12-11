@@ -11,38 +11,41 @@
 
 using namespace std;
 
+namespace htmlparser {
 
-class XmlNode
-{
-public:
-	XmlNode(string type);
-	XmlNode(string type, map<string, string> attributes);
-	XmlNode(XmlNode* parent, string type, map<string, string> attributes);
-	XmlNode(XmlNode* parent, string type, string contents);
+	class XmlNode
+	{
+	public:
+		XmlNode(std::string type);
+		XmlNode(std::string type, std::map<std::string, std::string> attributes);
+		XmlNode(XmlNode* parent, std::string type, std::map<std::string, std::string> attributes);
+		XmlNode(XmlNode* parent, std::string type, std::string contents);
 
-	bool has_children();
-	bool is_root();
-	bool has_text();
-	bool has_attribute(string key);
+		bool has_children();
+		bool is_root();
+		bool has_text();
+		bool has_attribute(std::string key);
 
-	string get_text();
-	XmlNode* get_parent();
-	vector<XmlNode*> get_children();
-	string get_attribute(string key);
-	string get_type();
-	int get_depth();
+		std::string get_text();
+		XmlNode* get_parent();
+		std::vector<XmlNode*> get_children();
+		std::string get_attribute(std::string key);
+		std::string get_type();
+		int get_depth();
 
-	void add_child(XmlNode* child);
+		void add_child(XmlNode* child);
 
-	
-private:
-	string _type;
-	map<string, string> _attributes;
-	vector<XmlNode*> _children;
-	string _contents;
-	XmlNode* _parent;
+		
+	private:
+		std::string _type;
+		std::map<std::string, std::string> _attributes;
+		std::vector<XmlNode*> _children;
+		std::string _contents;
+		XmlNode* _parent;
 
-};
+	};
+}
+
 
 
 #endif
