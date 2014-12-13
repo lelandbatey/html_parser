@@ -2,7 +2,7 @@
 #include <fstream>
 #include <streambuf>
 
-#include "../../html_parser.cc"
+#include "../../html_parser.cpp"
 
 // Tests to see if the index.html file in the current directory contains valid
 // html or not.

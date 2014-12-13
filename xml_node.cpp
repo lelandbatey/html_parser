@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 
-#include "xml_node.h"
-#include "lazy_string.h"
+#include "xml_node.hpp"
+#include "lazy_string.hpp"
 
 #pragma once
 

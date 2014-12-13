@@ -5,8 +5,8 @@
 #include <vector>
 #include <string>
 
-#include "xml_node.cc"
-#include "html_lexer.cc"
+#include "xml_node.cpp"
+#include "html_lexer.cpp"
 
 using namespace std;
 

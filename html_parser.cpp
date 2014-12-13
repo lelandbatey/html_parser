@@ -4,8 +4,8 @@
 #include <cctype> /* isspace() */
 #include <map>
 
-#include "html_parser.h"
-#include "lazy_string.h"
+#include "html_parser.hpp"
+#include "lazy_string.hpp"
 
 #ifndef DEBUG
 #define DEBUG 0

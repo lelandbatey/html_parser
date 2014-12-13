@@ -2,8 +2,8 @@
 #include <vector>
 #include <string>
 
-#include "html_lexer.h"
-#include "lazy_string.h"
+#include "html_lexer.hpp"
+#include "lazy_string.hpp"
 
 
 #ifndef DEBUG
