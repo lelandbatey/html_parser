@@ -19,12 +19,12 @@ bool htmlparser::has_only_whitespace(std::string& str) {
 }
 
 
-// Given an input string, break it into a vector of string, each string in the
+// Given an input string, break it into a vector of strings, each string in the
 // vector being a token.
 void htmlparser::HtmlLexer::tokenize(std::string& input_document){
-	std::vector<unsigned int> breaks;
+	std::vector<size_t> breaks;
 
-	for (unsigned int i = 0; i < input_document.length(); ++i){
+	for (auto i = 0; i < input_document.length(); ++i){
 		if (input_document[i] == '<'){
 			if (!breaks.size()){
 				breaks.push_back(i);
@@ -33,7 +33,7 @@ void htmlparser::HtmlLexer::tokenize(std::string& input_document){
 				if (breaks.back() != i){
 					breaks.push_back(i);
 				}
-				unsigned int end_comment = input_document.find("-->", i);
+				auto end_comment = input_document.find("-->", i);
 				if (end_comment != std::string::npos){
 					i = end_comment;
 				}
@@ -44,7 +44,7 @@ void htmlparser::HtmlLexer::tokenize(std::string& input_document){
 				}
 				// Causes for loop to pick up the ">" of the closing script
 				// tag as the end of the opening.
-				unsigned int end_script = input_document.find("/script", i);
+				auto end_script = input_document.find("/script", i);
 				if (end_script != std::string::npos){
 					i = end_script;
 				}
@@ -58,17 +58,17 @@ void htmlparser::HtmlLexer::tokenize(std::string& input_document){
 		}
 	}
 
-	for (unsigned int i = 0; i < breaks.size(); ++i){
+	for (auto i = 0; i < breaks.size(); ++i){
 		if (i){
-			int prior = breaks[i-1];
-			int substring_length = breaks[i] - prior;
+			auto prior = breaks[i-1];
+			auto substring_length = breaks[i] - prior;
 			string tmp = input_document.substr(prior, substring_length);
 			_tokens.push_back(tmp);
 		}
 	}
 
 	std::vector<std::string> tmp;
-	for (unsigned int i = 0; i < _tokens.size(); ++i){
+	for (auto i = 0; i < _tokens.size(); ++i){
 		if (!has_only_whitespace(_tokens[i])){
 			tmp.push_back(_tokens[i]);
 		}
@@ -87,7 +87,7 @@ std::string htmlparser::HtmlLexer::get_next_token(){
 		to_return = _tokens[_current_token_index];
 		++_current_token_index;
 	} else {
-		to_return = std::string('\0');
+		to_return = std::string(1, '\0');
 	}
 	return to_return;
 }
@@ -97,7 +97,7 @@ std::string htmlparser::HtmlLexer::peak_next_token(){
 	if (_current_token_index+1 < _tokens.size()){
 		to_return = _tokens[_current_token_index+1];
 	} else {
-		to_return = std::string('\0');
+		to_return = std::string(1, '\0');
 	}
 	return to_return;
 }
