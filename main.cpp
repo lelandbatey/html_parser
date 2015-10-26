@@ -4,7 +4,7 @@
 #include <fstream>
 #include <streambuf>
 
-#include "html_parser.cpp"
+#include "../include/html_parser.hpp"
 
 using namespace std;
 

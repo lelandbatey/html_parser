@@ -2,8 +2,8 @@
 #include <vector>
 #include <string>
 
-#include "html_lexer.hpp"
-#include "lazy_string.hpp"
+#include "../include/html_lexer.hpp"
+#include "../include/lazy_string.hpp"
 
 
 #ifndef DEBUG
@@ -24,7 +24,7 @@ bool htmlparser::has_only_whitespace(std::string& str) {
 void htmlparser::HtmlLexer::tokenize(std::string& input_document){
 	std::vector<size_t> breaks;
 
-	for (auto i = 0; i < input_document.length(); ++i){
+	for (unsigned int i = 0; i < input_document.length(); ++i){
 		if (input_document[i] == '<'){
 			if (!breaks.size()){
 				breaks.push_back(i);
@@ -58,7 +58,7 @@ void htmlparser::HtmlLexer::tokenize(std::string& input_document){
 		}
 	}
 
-	for (auto i = 0; i < breaks.size(); ++i){
+	for (unsigned int i = 0; i < breaks.size(); ++i){
 		if (i){
 			auto prior = breaks[i-1];
 			auto substring_length = breaks[i] - prior;
@@ -68,7 +68,7 @@ void htmlparser::HtmlLexer::tokenize(std::string& input_document){
 	}
 
 	std::vector<std::string> tmp;
-	for (auto i = 0; i < _tokens.size(); ++i){
+	for (unsigned int i = 0; i < _tokens.size(); ++i){
 		if (!has_only_whitespace(_tokens[i])){
 			tmp.push_back(_tokens[i]);
 		}

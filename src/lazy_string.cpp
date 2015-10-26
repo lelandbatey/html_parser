@@ -1,9 +1,9 @@
-#ifndef HTMLPARSER_LAZY_STR_H
-#define HTMLPARSER_LAZY_STR_H
 #include <string>
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+
+//#include "../include/lazy_string.hpp"
 
 using namespace std;
 
@@ -75,4 +75,3 @@ namespace htmlparser {
 }
 
 
-#endif

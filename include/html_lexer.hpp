@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 
+#include "../include/lazy_string.hpp"
+
 
 namespace htmlparser {
 

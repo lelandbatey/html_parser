@@ -1,10 +1,9 @@
 #include <iostream>
 #include <string>
 
-#include "xml_node.hpp"
-#include "lazy_string.hpp"
+#include "../include/xml_node.hpp"
+#include "../include/lazy_string.hpp"
 
-#pragma once
 
 
 bool htmlparser::XmlNode::has_children(){
