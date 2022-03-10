@@ -4,6 +4,8 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <functional>
+
 
 using namespace std;
 
@@ -15,13 +17,13 @@ namespace htmlparser {
 
 	// trim from start
 	static inline std::string &ltrim(std::string &s) {
-			s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+			s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(isspace))));
 			return s;
 	}
 
 	// trim from end
 	static inline std::string &rtrim(std::string &s) {
-			s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+			s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(isspace))).base(), s.end());
 			return s;
 	}
 
@@ -41,10 +43,10 @@ namespace htmlparser {
 	}
 
 	int upper(int c){
-		return std::toupper((unsigned char)c);
+		return toupper((unsigned char)c);
 	}
 	int lower(int c){
-		return std::tolower((unsigned char)c);
+		return tolower((unsigned char)c);
 	}
 	std::string strLower(std::string str){
 		std::transform(str.begin(), str.end(), str.begin(), lower); // Make it lowercase
@@ -73,6 +75,5 @@ namespace htmlparser {
 		return true;
 	}
 }
-
 
 #endif
